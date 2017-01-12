@@ -8,6 +8,7 @@ add_executable(
     args.h
     args.cpp
     commands.h
+    loopPair.h
 )
 
 set_target_properties(
