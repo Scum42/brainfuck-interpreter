@@ -7,4 +7,10 @@ add_executable(
     main.cpp
     args.h
     args.cpp
+    commands.h
+)
+
+set_target_properties(
+    BrainfuckInterpreter
+    PROPERTIES OUTPUT_NAME bf
 )
