@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     string script = trim(args[1]);
     cout << endl << script << endl;
 
-    system("pause");
+    cin.get();
 }
 
 ///// TRIM /////////////////////////////////////////////////////
