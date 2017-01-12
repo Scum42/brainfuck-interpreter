@@ -184,6 +184,7 @@ unsigned int match(bool forward)
 void execute()
 {
     //cout << "/// OUTPUT ///\n";
+    cout << endl;
     for (; currentInstruction < script.length(); currentInstruction++)
     {
         char cmd = script[currentInstruction];
