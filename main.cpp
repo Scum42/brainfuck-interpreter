@@ -21,7 +21,7 @@ void execute();
 void validate();
 void validate(int pos);
 unsigned int match(bool forward);
-void memdump();
+void memdump(Command cmd);
 
 #pragma endregion
 
@@ -53,11 +53,16 @@ int main(int argc, char** argv)
 
     if (options[O_HELP])
     {
-        cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -m ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
+        cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -c ] [ -u ] [ -j ] [ -m ] [ -q ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
         cout << "-?                    Show this help menu.\n";
         cout << "-d                    Dump memory at the end of execution.\n";
-        cout << "-D                    Dump memory after every command.\n";
+        cout << "-D                    Dump memory after every command (combine with -q to avoid output interfering).\n";
+        cout << "-c                    When dumping memory, display values as chars\n";
+        cout << "-u                    When dumping memory, display values as unsigned ints (0 - 255).\n";
+        cout << "-j                    When dumping memory, display values as signed ints (-128 - 127). This is the default setting.\n";
         cout << "-m                    Show minimized script before run.\n";
+        cout << "-q                    Quiet (no output)\n";
+        cout << "-Q                    Ignore input: all get commands will return zero\n";
         cout << "-f <filename>         Run code from the given file.\n";
         cout << "-s <script_string>    Run code from the given string.\n";
         cout << "-i <input>            Sets the input to use for execution.\n\n";
@@ -227,7 +232,7 @@ void execute()
             }
         }
 
-        if (command == NOT_A_COMMAND) return;
+        if (command == NOT_A_COMMAND) continue;
 
         switch (command)
         {
@@ -271,19 +276,28 @@ void execute()
             }
             case Get:
             {
+                if (options[O_IGNORE_INPUT])
+                {
+                    memory[pointer] = 0;
+                }
+                else
+                {
+                    // Placeholder. Add the stringstream thing.
+                    memory[pointer] = 0;
+                }
                 break;
             }
             case Put:
             {
-                cout << memory[pointer];
+                if (!options[O_QUIET]) cout << memory[pointer];
                 break;
             }
         }
 
-        if (options[O_DUMP_VERBOSE]) memdump();
+        if (options[O_DUMP_VERBOSE]) memdump(command);
     }
 
-    if (options[O_DUMP]) memdump();
+    if (options[O_DUMP]) memdump(NOT_A_COMMAND);
     else cout << endl;
 }
 
@@ -293,14 +307,54 @@ void execute()
 
 #pragma region MEMDUMP
 
-void memdump()
+void memdump(Command cmd)
 {
-    cout << "\nMEMORY: ";
+    if (cmd != NOT_A_COMMAND) cout << COMMAND_CHARS[cmd] << ": ";
+    else cout << endl << "\nFINAL MEMORY: ";
+
     for (int i = memlower; i <= memupper; i++)
     {
         validate(i);
-        cout << "[ " << left << setw(4) << static_cast<int>(memory[i]) << " ]";
+        cout << "[";
+        if (i == pointer) cout << ">";
+        else cout << " ";
+
+        cout << left;
+
+        if (options[O_DUMP_AS_CHAR])
+        {
+            cout << setw(1) << memory[i];
+        }
+        else if (options[O_DUMP_AS_UINT])
+        {
+            int outnum = static_cast<int>(memory[i]);
+            if (outnum < 0) outnum += 256;
+            cout << setw(3) << outnum;
+        }
+        else
+        {
+            cout << setw(4) << static_cast<int>(memory[i]);
+        }
+        
+        cout << " ]";
     }
+
+    if (cmd == Put)
+    {
+        cout << " out: '" << memory[pointer] << "'";
+    }
+    else if (cmd == Get)
+    {
+        cout << " in: ";
+        if (memory[pointer] == 0) cout << "nul";
+        else cout << memory[pointer];
+    }
+    else if ((cmd == Loop && memory[pointer] == 0) ||
+             (cmd == Endloop && memory[pointer] != 0))
+    {
+        cout << " jump";
+    }
+
     cout << endl;
 }
 

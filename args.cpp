@@ -28,32 +28,25 @@ vector<string> parseArgs(int argc, char** argv)
         {
             for (int j = 1; j < arg.length(); j++)
             {
-                switch (arg[j])
+                for (int k = 0; k < NUM_OPTIONS; k++)
                 {
-                    case 'd':
-                        options[O_DUMP] = true;
-                        break;
-                    case 'D':
-                        options[O_DUMP_VERBOSE] = true;
-                        break;
-                    case 'm':
-                        options[O_SHOW_MIN] = true;
-                        break;
-                    case 'f':
-                        options[O_FILENAME] = true;
-                        o_filename = args[++i];
-                        break;
-                    case 's':
-                        options[O_STRING_SCRIPT] = true;
-                        o_stringscript = args[++i];
-                        break;
-                    case 'i':
-                        options[O_INPUT] = true;
-                        o_input = args[++i];
-                        break;
-                    case '?':
-                        options[O_HELP] = true;
-                        break;
+                    if (arg[j] == OPTION_CHARS[k])
+                    {
+                        options[k] = true;
+
+                        switch (k)
+                        {
+                            case O_FILENAME:
+                                o_filename = args[++i];
+                                break;
+                            case O_STRING_SCRIPT:
+                                o_stringscript = args[++i];
+                                break;
+                            case O_INPUT:
+                                o_input = args[++i];
+                                break;
+                        }
+                    }
                 }
             }
         }
