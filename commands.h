@@ -27,3 +27,5 @@ const char COMMAND_CHARS[NUM_COMMANDS] =
     '[',
     ']'
 };
+
+const char COMMENT_CHAR = '#';

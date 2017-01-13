@@ -33,6 +33,7 @@ int pointer = 0;
 map<int, char> memory;
 
 string script = "";
+stringstream input;
 unsigned int currentInstruction = 0;
 
 int memlower = 0;
@@ -62,7 +63,7 @@ int main(int argc, char** argv)
         cout << "-j                    When dumping memory, display values as signed ints (-128 - 127). This is the default setting.\n";
         cout << "-m                    Show minimized script before run.\n";
         cout << "-q                    Quiet (no output)\n";
-        cout << "-Q                    Ignore input: all get commands will return zero\n";
+        cout << "-Q                    Ignore input (all get commands will return zero)\n";
         cout << "-f <filename>         Run code from the given file.\n";
         cout << "-s <script_string>    Run code from the given string.\n";
         cout << "-i <input>            Sets the input to use for execution.\n\n";
@@ -81,6 +82,11 @@ int main(int argc, char** argv)
         script = o_stringscript;
     }
 
+    if (options[O_INPUT])
+    {
+        input << o_input;
+    }
+
     script = trim(script);
 
     if (options[O_SHOW_MIN]) cout << "\nMinimized script:\n" << script << endl;
@@ -97,13 +103,28 @@ int main(int argc, char** argv)
 string trim(string script)
 {
     string result = "";
+    bool ignore = false;
     for each (char c in script)
     {
         bool isCmd = false;
 
         for (int i = 0; i < NUM_COMMANDS; i++)
+        {
+            if (ignore)
+            {
+                if (c == '\n') ignore = false;
+                continue;
+            }
+
             if (c == COMMAND_CHARS[i])
+            {
                 isCmd = true;
+            }
+            else if (c == COMMENT_CHAR)
+            {
+                ignore = true;
+            }
+        }
 
         if (isCmd) result += c;
     }
@@ -282,8 +303,10 @@ void execute()
                 }
                 else
                 {
-                    // Placeholder. Add the stringstream thing.
-                    memory[pointer] = 0;
+                    char in = 0;
+                    if (input.good()) in = input.get();
+                    if (in == -1) in = 0;
+                    memory[pointer] = in;
                 }
                 break;
             }
@@ -347,7 +370,7 @@ void memdump(Command cmd)
     {
         cout << " in: ";
         if (memory[pointer] == 0) cout << "nul";
-        else cout << memory[pointer];
+        else cout << "'" << memory[pointer] << "'";
     }
     else if ((cmd == Loop && memory[pointer] == 0) ||
              (cmd == Endloop && memory[pointer] != 0))
