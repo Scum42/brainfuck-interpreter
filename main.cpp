@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 #include <map>
+#include <fstream>
+#include <sstream>
 
 #include "args.h"
 #include "commands.h"
@@ -47,13 +49,38 @@ vector<LoopPair> loopEnds;
 
 int main(int argc, char** argv)
 {
-    vector<string> args = convertArgs(argc, argv);
-    //for each (string s in args) cout << s << endl;
+    vector<string> args = parseArgs(argc, argv);
 
-    script = trim(args[1]);
+    if (options[O_HELP])
+    {
+        cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -m ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
+        cout << "-?                    Show this help menu.\n";
+        cout << "-d                    Dump memory at the end of execution.\n";
+        cout << "-D                    Dump memory after every command.\n";
+        cout << "-m                    Show minimized script before run.\n";
+        cout << "-f <filename>         Run code from the given file.\n";
+        cout << "-s <script_string>    Run code from the given string.\n";
+        cout << "-i <input>            Sets the input to use for execution.\n\n";
+        exit(0);
+    }
+
+    if (options[O_FILENAME])
+    {
+        ifstream file(o_filename);
+        stringstream ss;
+        ss << file.rdbuf();
+        script = ss.str();
+    }
+    else if (options[O_STRING_SCRIPT])
+    {
+        script = o_stringscript;
+    }
+
+    script = trim(script);
+
+    if (options[O_SHOW_MIN]) cout << "\nMinimized script:\n" << script << endl;
+
     execute();
-
-    //cin.get();
 }
 
 #pragma endregion
@@ -253,10 +280,11 @@ void execute()
             }
         }
 
-        //memdump();
+        if (options[O_DUMP_VERBOSE]) memdump();
     }
 
-    memdump();
+    if (options[O_DUMP]) memdump();
+    else cout << endl;
 }
 
 #pragma endregion
