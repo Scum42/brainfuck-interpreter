@@ -2,13 +2,10 @@ cmake_minimum_required(VERSION 2.6)
 
 project(BrainfuckInterpreter)
 
+FILE(GLOB SOURCES src/*)
 add_executable(
     BrainfuckInterpreter
-    main.cpp
-    args.h
-    args.cpp
-    commands.h
-    loopPair.h
+    ${SOURCES}
 )
 
 set_target_properties(
