@@ -12,20 +12,22 @@ enum Command
     Put,
     Loop,
     Endloop,
+	Dump,
 
     NUM_COMMANDS
 };
 
 const char COMMAND_CHARS[NUM_COMMANDS] =
 {
-    '<',
-    '>',
-    '+',
-    '-',
-    ',',
-    '.',
-    '[',
-    ']'
+	'<',
+	'>',
+	'+',
+	'-',
+	',',
+	'.',
+	'[',
+	']',
+	'*'
 };
 
 const char COMMENT_CHAR = '#';

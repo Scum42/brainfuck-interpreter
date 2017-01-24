@@ -315,6 +315,11 @@ void execute()
                 if (!options[O_QUIET]) cout << memory[pointer];
                 break;
             }
+			case Dump:
+			{
+				memdump(Dump);
+				break;
+			}
         }
 
         if (options[O_DUMP_VERBOSE]) memdump(command);
