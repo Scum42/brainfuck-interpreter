@@ -55,18 +55,7 @@ int main(int argc, char** argv)
     if (options[O_HELP])
     {
         cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -c ] [ -u ] [ -j ] [ -m ] [ -q ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
-        cout << "-?                    Show this help menu.\n";
-        cout << "-d                    Dump memory at the end of execution.\n";
-        cout << "-D                    Dump memory after every command (combine with -q to avoid output interfering).\n";
-        cout << "-c                    When dumping memory, display values as chars\n";
-        cout << "-u                    When dumping memory, display values as unsigned ints (0 - 255).\n";
-        cout << "-j                    When dumping memory, display values as signed ints (-128 - 127). This is the default setting.\n";
-        cout << "-m                    Show minimized script before run.\n";
-        cout << "-q                    Quiet (no output)\n";
-        cout << "-Q                    Ignore input (all get commands will return zero)\n";
-        cout << "-f <filename>         Run code from the given file.\n";
-        cout << "-s <script_string>    Run code from the given string.\n";
-        cout << "-i <input>            Sets the input to use for execution.\n\n";
+		cout << "Placeholder: A new system for this help command is incoming.\n\n";
         exit(0);
     }
 
