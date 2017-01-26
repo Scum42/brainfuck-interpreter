@@ -347,7 +347,7 @@ void memdump(Command cmd)
         if (i == pointer) cout << ">";
         else cout << " ";
 
-        cout << left;
+        cout << right;
 
         if (options[O_DUMP_AS_CHAR])
         {
