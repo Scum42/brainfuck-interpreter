@@ -1,4 +1,4 @@
-# First of all, we need to parse the inputs.
+# First of all we need to parse the inputs
 
 ,					# Read input character to cell 0
 
