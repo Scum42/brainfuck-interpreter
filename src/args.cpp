@@ -21,12 +21,12 @@ vector<string> parseArgs(int argc, char** argv)
         args.push_back(arg);
     }
 
-    for (int i = 0; i < args.size(); i++)
+    for (unsigned int i = 0; i < args.size(); i++)
     {
         string arg = args[i];
         if (arg[0] == '-')
         {
-            for (int j = 1; j < arg.length(); j++)
+            for (unsigned int j = 1; j < arg.length(); j++)
             {
                 for (int k = 0; k < NUM_OPTIONS; k++)
                 {
