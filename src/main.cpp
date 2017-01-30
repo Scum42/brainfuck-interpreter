@@ -5,6 +5,7 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 
 #include "args.h"
 #include "commands.h"
@@ -35,6 +36,7 @@ map<int, char> memory;
 string script = "";
 stringstream input;
 unsigned int currentInstruction = 0;
+unsigned int totalCommands = 0;
 
 int memlower = 0;
 int memupper = 0;
@@ -52,12 +54,12 @@ int main(int argc, char** argv)
 {
 	vector<string> args = parseArgs(argc, argv);
 
-    if (options[O_HELP])
-    {
-        cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -c ] [ -u ] [ -j ] [ -m ] [ -q ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
+	if (options[O_HELP])
+	{
+		cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -c ] [ -u ] [ -j ] [ -m ] [ -q ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
 		cout << "Placeholder: A new system for this help command is incoming.\n\n";
-        exit(0);
-    }
+		exit(0);
+	}
 
 	if (options[O_FILENAME])
 	{
@@ -80,7 +82,18 @@ int main(int argc, char** argv)
 
 	if (options[O_SHOW_MIN]) cout << "\nMinimized script:\n" << script << endl;
 
+	auto begin = chrono::high_resolution_clock::now();
 	execute();
+	if (options[O_REPORT])
+	{
+		auto end = chrono::high_resolution_clock::now();
+		auto dur = chrono::duration_cast<chrono::microseconds>(end - begin);
+
+		int length = 30;
+		cout << left << setw(length) << "Minimized script length: " << script.length() << " chars\n";
+		cout << left << setw(length) << "Total commands run: " << totalCommands << " commands\n";
+		cout << left << setw(length) << "Time to run: " << dur.count() / 1000.0f << " milliseconds\n";
+	}
 }
 
 #pragma endregion
@@ -317,6 +330,7 @@ void execute()
 		}
 
 		if (options[O_DUMP_VERBOSE]) memdump(command);
+		if (options[O_REPORT]) totalCommands++;
 	}
 
 	if (options[O_DUMP]) memdump(NOT_A_COMMAND);

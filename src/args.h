@@ -22,6 +22,7 @@ enum Option
     O_IGNORE_INPUT,   // All get commands read a zero
     O_HELP,           // Show help
 	O_BFHELP,         // Show Brainfuck help
+	O_REPORT,         // Report on performance after run
 
     NUM_OPTIONS
 };
@@ -40,7 +41,8 @@ const char OPTION_CHARS[NUM_OPTIONS] =
     'q',
     'Q',
     '?',
-	'b'
+	'b',
+	'r'
 };
 
 const string OPTION_PARAMS[NUM_OPTIONS] = 
