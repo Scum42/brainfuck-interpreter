@@ -93,12 +93,13 @@ string trim(string script)
 {
 	string result = "";
 	int openingBracketCounter = 0;
-	for (unsigned int i = 0; i < script.length(); i++)
+	bool noBracketCommentYet = true;
+
+	for each (char c in script)
 	{
-		char c = script[i];
 		bool isCmd = false;
 
-		if (i == 0 && c == COMMAND_CHARS[C_LOOP_BEGIN])
+		if (noBracketCommentYet && c == COMMAND_CHARS[C_LOOP_BEGIN])
 		{
 			openingBracketCounter++;
 			continue;
@@ -110,9 +111,12 @@ string trim(string script)
 			continue;
 		}
 
-		for (int j = 0; j < NUM_COMMANDS; j++)
+		// If we got past those ifs, we're past the opening bracket comment
+		noBracketCommentYet = false;
+
+		for each (char cmdChar in COMMAND_CHARS)
 		{
-			if (c == COMMAND_CHARS[j])
+			if (c == cmdChar)
 			{
 				isCmd = true;
 			}
