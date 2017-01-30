@@ -111,13 +111,11 @@ string trim(string script)
 			continue;
 		}
 
-		// If we got past those ifs, we're past the opening bracket comment
-		noBracketCommentYet = false;
-
 		for each (char cmdChar in COMMAND_CHARS)
 		{
 			if (c == cmdChar)
 			{
+				noBracketCommentYet = false;
 				isCmd = true;
 			}
 		}
