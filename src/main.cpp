@@ -56,8 +56,19 @@ int main(int argc, char** argv)
 
 	if (options[O_HELP])
 	{
-		cout << "Syntax:\nbf [ -? ] [ -d ] [ -D ] [ -c ] [ -u ] [ -j ] [ -m ] [ -q ] [ -f <filename> | -s <script_string> ] [ -i <input> ]\n\n";
-		cout << "Placeholder: A new system for this help command is incoming.\n\n";
+		cout << "Syntax:\nbf";
+		for (int i = 0; i < NUM_OPTIONS; i++)
+		{
+			cout << " [ -" << OPTION_CHARS[i] << OPTION_PARAMS[i] << " ]";
+		}
+
+		for (int i = 0; i < NUM_OPTIONS; i++)
+		{
+			// TODO: Finish help
+		}
+
+		cout << endl;
+
 		exit(0);
 	}
 
