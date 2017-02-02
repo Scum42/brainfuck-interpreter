@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 		script = o_stringscript;
 	}
 
-	if (options[O_INPUT])
+	if (options[O_INPUT] && !options[O_IGNORE_INPUT])
 	{
 		input << o_input;
 	}
@@ -118,10 +118,17 @@ int main(int argc, char** argv)
 	if (options[O_SHOW_MIN]) cout << "\nMinimized script:\n" << script << endl;
 
 	auto begin = chrono::high_resolution_clock::now();
+
 	execute();
+
+	auto end = chrono::high_resolution_clock::now();
+
+	if (options[O_DUMP]) memdump(NOT_A_COMMAND);
+
 	if (options[O_REPORT])
 	{
-		auto end = chrono::high_resolution_clock::now();
+		cout << endl;
+
 		auto dur = chrono::duration_cast<chrono::microseconds>(end - begin);
 
 		int length = 30;
@@ -339,17 +346,10 @@ void execute()
 		}
 		case C_GET:
 		{
-			if (options[O_IGNORE_INPUT])
-			{
-				memory[pointer] = 0;
-			}
-			else
-			{
-				char in = 0;
-				if (input.good()) in = input.get();
-				if (in == -1) in = 0;
-				memory[pointer] = in;
-			}
+			char in = 0;
+			if (input.good()) in = input.get();
+			if (in == -1) in = 0;
+			memory[pointer] = in;
 			break;
 		}
 		case C_PUT:
@@ -368,8 +368,7 @@ void execute()
 		if (options[O_REPORT]) totalCommands++;
 	}
 
-	if (options[O_DUMP]) memdump(NOT_A_COMMAND);
-	else cout << endl;
+	if (!options[O_DUMP]) cout << endl;
 }
 
 #pragma endregion
@@ -381,6 +380,7 @@ void execute()
 void memdump(Command cmd)
 {
 	if (cmd == NOT_A_COMMAND) cout << endl << "\nFINAL MEMORY: ";
+	else if (cmd == C_DUMP && options[O_QUIET]) return;
 	else cout << COMMAND_CHARS[cmd] << ": ";
 
 	for (int i = memlower; i <= memupper; i++)
@@ -396,15 +396,15 @@ void memdump(Command cmd)
 		{
 			cout << setw(1) << memory[i];
 		}
-		else if (options[O_DUMP_AS_UINT])
+		else if (options[O_DUMP_AS_INT])
+		{
+			cout << setw(4) << static_cast<int>(memory[i]);
+		}
+		else
 		{
 			int outnum = static_cast<int>(memory[i]);
 			if (outnum < 0) outnum += 256;
 			cout << setw(3) << outnum;
-		}
-		else
-		{
-			cout << setw(4) << static_cast<int>(memory[i]);
 		}
 
 		cout << " ]";
