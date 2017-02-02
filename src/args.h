@@ -58,15 +58,15 @@ const string OPTION_PARAMS[NUM_OPTIONS] =
 	"",
 	"",
 	"",
-	" <path>",
-	" <string-script>",
-	" <input-string>"
+	"<path>",
+	"<script>",
+	"<string>"
 };
 
 const string OPTION_DESCRIPTIONS[NUM_OPTIONS] =
 {
 	"Show this help menu.",
-	"Show help on how to write in Brainfuck."
+	"Show help on how to write in Brainfuck.",
 	"Dump memory at the end of execution.",
 	"Dump memory after every command (combine with -q to avoid output interfering).",
 	"When dumping memory, display values as chars.",
@@ -74,11 +74,11 @@ const string OPTION_DESCRIPTIONS[NUM_OPTIONS] =
 	"When dumping memory, display values as signed ints (-128 - 127). This is the default setting.",
 	"Show a performance report after execution.",
 	"Quiet (no output).",
-	"Ignore input (all get commands behave as EOF)."
+	"Ignore input (all get commands behave as EOF).",
 	"Show minimized script before run.",
 	"Run code from the given file.",
 	"Run code from the given string.",
-	"Sets the input as a string to use for execution.",
+	"Sets the input as a string to use for execution."
 };
 
 extern bitset<NUM_OPTIONS> options;

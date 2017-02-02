@@ -56,18 +56,30 @@ int main(int argc, char** argv)
 
 	if (options[O_HELP])
 	{
-		cout << "Syntax:\nbf";
-		for (int i = 0; i < NUM_OPTIONS; i++)
-		{
-			cout << " [ -" << OPTION_CHARS[i] << OPTION_PARAMS[i] << " ]";
-		}
+		cout << "\nSyntax:\n\nbf";
+        unsigned int longest = 0;
 
 		for (int i = 0; i < NUM_OPTIONS; i++)
 		{
-			// TODO: Finish help
+			cout << " [ -" << OPTION_CHARS[i]
+                << (OPTION_PARAMS[i] == "" ? "" : " ")
+                << OPTION_PARAMS[i] << " ]";
+
+            // Use this time to find the number we need to use for the setw later
+            if (longest < OPTION_PARAMS[i].length()) longest = OPTION_PARAMS[i].length();
 		}
 
-		cout << endl;
+        longest += 4; // Add a bit of extra padding
+        cout << "\n\n";
+
+        // Print out the things
+		for (int i = 0; i < NUM_OPTIONS; i++)
+		{
+            cout << "-" << OPTION_CHARS[i] << " "
+                << setw(longest) << setfill('.') << left
+                << (OPTION_PARAMS[i] == "" ? "" : OPTION_PARAMS[i] + " ")
+                << " " << OPTION_DESCRIPTIONS[i] << endl;
+		}
 
 		exit(0);
 	}
