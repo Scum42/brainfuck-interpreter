@@ -75,7 +75,7 @@ int main(int argc, char** argv)
         // Print out the things
 		for (int i = 0; i < NUM_OPTIONS; i++)
 		{
-            cout << "-" << OPTION_CHARS[i] << " "
+            cout << " -" << OPTION_CHARS[i] << " "
                 << setw(longest) << setfill('.') << left
                 << (OPTION_PARAMS[i] == "" ? "" : OPTION_PARAMS[i] + " ")
                 << " " << OPTION_DESCRIPTIONS[i] << endl;
@@ -83,6 +83,18 @@ int main(int argc, char** argv)
 
 		exit(0);
 	}
+
+    if (options[O_BFHELP])
+    {
+        cout << "\nBrainfuck commands:\n\n";
+
+        for (int i = 0; i < NUM_COMMANDS; i++)
+        {
+            cout << " " << COMMAND_CHARS[i] << " ... " << COMMAND_DESCRIPTIONS[i] << endl;
+        }
+
+        exit(0);
+    }
 
 	if (options[O_FILENAME])
 	{
