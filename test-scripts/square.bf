@@ -51,7 +51,13 @@
 	<< -
 ]
 
+>
+
+[-]					# Zero out the extra copy of the input number
+
+>>					# Move cursor to the output number
+
 *
 
-# |0|0|x|0|x^2|
-#    ^
+# |0|0|0|0|x^2|
+#           ^
