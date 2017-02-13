@@ -1,14 +1,17 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(BrainfuckInterpreter)
+set(PROJECT BrainfuckInterpreter)
+set(EXE bf)
 
-FILE(GLOB SOURCES src/*)
+project(${PROJECT})
+
+FILE(GLOB_RECURSE SOURCES src/*)
 add_executable(
-    BrainfuckInterpreter
+    ${PROJECT}
     ${SOURCES}
 )
 
 set_target_properties(
-    BrainfuckInterpreter
-    PROPERTIES OUTPUT_NAME bf
+    ${PROJECT}
+    PROPERTIES OUTPUT_NAME ${EXE}
 )
