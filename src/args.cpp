@@ -5,7 +5,7 @@ string o_filename;
 string o_stringscript;
 string o_input;
 
-vector<string> parseArgs(int argc, char** argv)
+vector<string> parseArgs(int argc, char **argv)
 {
     vector<string> args;
 
@@ -15,7 +15,8 @@ vector<string> parseArgs(int argc, char** argv)
         for (int j = 0; true; j++)
         {
             char c = argv[i][j];
-            if (c == '\0') break;
+            if (c == '\0')
+                break;
             arg += c;
         }
         args.push_back(arg);
@@ -36,15 +37,15 @@ vector<string> parseArgs(int argc, char** argv)
 
                         switch (k)
                         {
-                            case O_FILENAME:
-                                o_filename = args[++i];
-                                break;
-                            case O_STRING_SCRIPT:
-                                o_stringscript = args[++i];
-                                break;
-                            case O_INPUT:
-                                o_input = args[++i];
-                                break;
+                        case O_FILENAME:
+                            o_filename = args[++i];
+                            break;
+                        case O_STRING_SCRIPT:
+                            o_stringscript = args[++i];
+                            break;
+                        case O_INPUT:
+                            o_input = args[++i];
+                            break;
                         }
                     }
                 }
