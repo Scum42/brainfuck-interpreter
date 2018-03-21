@@ -50,7 +50,7 @@ vector<LoopPair> loopEnds;
 
 #pragma region MAIN
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
     vector<string> args = parseArgs(argc, argv);
 
@@ -62,11 +62,12 @@ int main(int argc, char** argv)
         for (int i = 0; i < NUM_OPTIONS; i++)
         {
             cout << " [ -" << OPTION_CHARS[i]
-                << (OPTION_PARAMS[i] == "" ? "" : " ")
-                << OPTION_PARAMS[i] << " ]";
+                 << (OPTION_PARAMS[i] == "" ? "" : " ")
+                 << OPTION_PARAMS[i] << " ]";
 
             // Use this time to find the number we need to use for the setw later
-            if (longest < OPTION_PARAMS[i].length()) longest = OPTION_PARAMS[i].length();
+            if (longest < OPTION_PARAMS[i].length())
+                longest = OPTION_PARAMS[i].length();
         }
 
         longest += 4; // Add a bit of extra padding
@@ -76,9 +77,9 @@ int main(int argc, char** argv)
         for (int i = 0; i < NUM_OPTIONS; i++)
         {
             cout << " -" << OPTION_CHARS[i] << " "
-                << setw(longest) << setfill('.') << left
-                << (OPTION_PARAMS[i] == "" ? "" : OPTION_PARAMS[i] + " ")
-                << " " << OPTION_DESCRIPTIONS[i] << endl;
+                 << setw(longest) << setfill('.') << left
+                 << (OPTION_PARAMS[i] == "" ? "" : OPTION_PARAMS[i] + " ")
+                 << " " << OPTION_DESCRIPTIONS[i] << endl;
         }
 
         exit(0);
@@ -115,7 +116,9 @@ int main(int argc, char** argv)
 
     script = trim(script);
 
-    if (options[O_SHOW_MIN]) cout << "\nMinimized script:\n" << script << endl;
+    if (options[O_SHOW_MIN])
+        cout << "\nMinimized script:\n"
+             << script << endl;
 
     auto begin = chrono::high_resolution_clock::now();
 
@@ -123,7 +126,8 @@ int main(int argc, char** argv)
 
     auto end = chrono::high_resolution_clock::now();
 
-    if (options[O_DUMP]) memdump(NOT_A_COMMAND);
+    if (options[O_DUMP])
+        memdump(NOT_A_COMMAND);
 
     if (options[O_REPORT])
     {
@@ -140,7 +144,7 @@ int main(int argc, char** argv)
 
 #pragma endregion
 
-////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
 #pragma region TRIM
 
@@ -150,7 +154,7 @@ string trim(string script)
     int openingBracketCounter = 0;
     bool noBracketCommentYet = true;
 
-    for each (char c in script)
+    for (char c : script)
     {
         bool isCmd = false;
 
@@ -161,12 +165,14 @@ string trim(string script)
         }
         else if (openingBracketCounter != 0)
         {
-            if (c == COMMAND_CHARS[C_LOOP_BEGIN]) openingBracketCounter++;
-            else if (c == COMMAND_CHARS[C_LOOP_END]) openingBracketCounter--;
+            if (c == COMMAND_CHARS[C_LOOP_BEGIN])
+                openingBracketCounter++;
+            else if (c == COMMAND_CHARS[C_LOOP_END])
+                openingBracketCounter--;
             continue;
         }
 
-        for each (char cmdChar in COMMAND_CHARS)
+        for (char cmdChar : COMMAND_CHARS)
         {
             if (c == cmdChar)
             {
@@ -175,7 +181,8 @@ string trim(string script)
             }
         }
 
-        if (isCmd) result += c;
+        if (isCmd)
+            result += c;
     }
 
     return result;
@@ -183,11 +190,14 @@ string trim(string script)
 
 #pragma endregion
 
-////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
 #pragma region VALIDATE
 
-void validate() { validate(pointer); }
+void validate()
+{
+    validate(pointer);
+}
 void validate(int pos)
 {
     if (memory.find(pos) == memory.end())
@@ -198,20 +208,20 @@ void validate(int pos)
 
 #pragma endregion
 
-////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
 #pragma region MATCH
 
 unsigned int match(bool forward)
 {
     // See if this bracket is matched; return the matching instruction
-    vector<LoopPair>& mylist = forward ? loopStarts : loopEnds;
-    vector<LoopPair>& matchlist = forward ? loopEnds : loopStarts;
-    for each (LoopPair lp in mylist)
+    vector<LoopPair> &mylist = forward ? loopStarts : loopEnds;
+    vector<LoopPair> &matchlist = forward ? loopEnds : loopStarts;
+    for (LoopPair lp : mylist)
     {
         if (lp.instruction == currentInstruction)
         {
-            for each (LoopPair lp2 in matchlist)
+            for (LoopPair lp2 : matchlist)
             {
                 if (lp.id == lp2.id)
                 {
@@ -242,8 +252,10 @@ unsigned int match(bool forward)
                 break;
             }
 
-            if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_END]) count--;
-            else if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_BEGIN]) count++;
+            if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_END])
+                count--;
+            else if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_BEGIN])
+                count++;
         }
         else
         {
@@ -254,8 +266,10 @@ unsigned int match(bool forward)
                 break;
             }
 
-            if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_END]) count++;
-            else if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_BEGIN]) count--;
+            if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_END])
+                count++;
+            else if (script[matchingInstruction] == COMMAND_CHARS[C_LOOP_BEGIN])
+                count--;
         }
     }
 
@@ -279,7 +293,7 @@ unsigned int match(bool forward)
 
 #pragma endregion
 
-////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
 #pragma region EXECUTE
 
@@ -302,93 +316,110 @@ void execute()
             }
         }
 
-        if (command == NOT_A_COMMAND) continue;
+        if (command == NOT_A_COMMAND)
+            continue;
 
         switch (command)
         {
-            case C_LEFT:
-            {
-                pointer--;
-                if (pointer < memlower) memlower = pointer;
-                break;
-            }
-            case C_RIGHT:
-            {
-                pointer++;
-                if (pointer > memupper) memupper = pointer;
-                break;
-            }
-            case C_INCREMENT:
-            {
-                validate();
-                memory[pointer]++;
-                break;
-            }
-            case C_DECREMENT:
-            {
-                validate();
-                memory[pointer]--;
-                break;
-            }
-            case C_LOOP_BEGIN:
-            {
-                unsigned int matchingInstruction = match(true);
-                validate();
-                if (memory[pointer] == 0) currentInstruction = matchingInstruction;
-                break;
-            }
-            case C_LOOP_END:
-            {
-                unsigned int matchingInstruction = match(false);
-                validate();
-                if (memory[pointer] != 0) currentInstruction = matchingInstruction;
-                break;
-            }
-            case C_GET:
-            {
-                char in = 0;
-                if (input.good()) in = input.get();
-                if (in == -1) in = 0;
-                memory[pointer] = in;
-                break;
-            }
-            case C_PUT:
-            {
-                if (!options[O_QUIET]) cout << memory[pointer];
-                break;
-            }
-            case C_DUMP:
-            {
-                memdump(C_DUMP);
-                break;
-            }
+        case C_LEFT:
+        {
+            pointer--;
+            if (pointer < memlower)
+                memlower = pointer;
+            break;
+        }
+        case C_RIGHT:
+        {
+            pointer++;
+            if (pointer > memupper)
+                memupper = pointer;
+            break;
+        }
+        case C_INCREMENT:
+        {
+            validate();
+            memory[pointer]++;
+            break;
+        }
+        case C_DECREMENT:
+        {
+            validate();
+            memory[pointer]--;
+            break;
+        }
+        case C_LOOP_BEGIN:
+        {
+            unsigned int matchingInstruction = match(true);
+            validate();
+            if (memory[pointer] == 0)
+                currentInstruction = matchingInstruction;
+            break;
+        }
+        case C_LOOP_END:
+        {
+            unsigned int matchingInstruction = match(false);
+            validate();
+            if (memory[pointer] != 0)
+                currentInstruction = matchingInstruction;
+            break;
+        }
+        case C_GET:
+        {
+            char in = 0;
+            if (input.good())
+                in = input.get();
+            if (in == -1)
+                in = 0;
+            memory[pointer] = in;
+            break;
+        }
+        case C_PUT:
+        {
+            if (!options[O_QUIET])
+                cout << memory[pointer];
+            break;
+        }
+        case C_DUMP:
+        {
+            memdump(C_DUMP);
+            break;
+        }
         }
 
-        if (options[O_DUMP_VERBOSE]) memdump(command);
-        if (options[O_REPORT]) totalCommands++;
+        if (options[O_DUMP_VERBOSE])
+            memdump(command);
+        if (options[O_REPORT])
+            totalCommands++;
     }
 
-    if (!options[O_DUMP]) cout << endl;
+    if (!options[O_DUMP])
+        cout << endl;
 }
 
 #pragma endregion
 
-////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////
 
 #pragma region MEMDUMP
 
 void memdump(Command cmd)
 {
-    if (cmd == NOT_A_COMMAND) cout << endl << "\nFINAL MEMORY: ";
-    else if (cmd == C_DUMP && options[O_QUIET]) return;
-    else cout << COMMAND_CHARS[cmd] << ": ";
+    if (cmd == NOT_A_COMMAND)
+        cout << endl
+             << "\nFINAL MEMORY: ";
+    else if (cmd == C_DUMP && options[O_QUIET])
+        return;
+    else
+        cout << COMMAND_CHARS[cmd] << ": ";
 
     for (int i = memlower; i <= memupper; i++)
     {
         validate(i);
         cout << "[";
-        if (i == pointer) cout << ">";
-        else cout << " ";
+        if (i == pointer)
+            cout << ">";
+        else
+            cout << " ";
 
         cout << right;
 
@@ -403,7 +434,8 @@ void memdump(Command cmd)
         else
         {
             int outnum = static_cast<int>(memory[i]);
-            if (outnum < 0) outnum += 256;
+            if (outnum < 0)
+                outnum += 256;
             cout << setw(3) << outnum;
         }
 
@@ -417,11 +449,13 @@ void memdump(Command cmd)
     else if (cmd == C_GET)
     {
         cout << " in: ";
-        if (memory[pointer] == 0) cout << "nul";
-        else cout << "'" << memory[pointer] << "'";
+        if (memory[pointer] == 0)
+            cout << "nul";
+        else
+            cout << "'" << memory[pointer] << "'";
     }
     else if ((cmd == C_LOOP_BEGIN && memory[pointer] == 0) ||
-        (cmd == C_LOOP_END && memory[pointer] != 0))
+             (cmd == C_LOOP_END && memory[pointer] != 0))
     {
         cout << " jump";
     }
