@@ -1,7 +1,7 @@
 @echo off
 
-set bfolder=b_vs2015
-set genfor="Visual Studio 14 2015"
+set bfolder=b_make
+set genfor="MinGW Makefiles"
 
 if not exist %bfolder% mkdir %bfolder%
 cd %bfolder%

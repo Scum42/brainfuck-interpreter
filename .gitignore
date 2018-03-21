@@ -1,1 +1,5 @@
+# The build folders
 b_*
+
+# VSCode settings
+.vscode
