@@ -1,5 +1,6 @@
 # The build folders
 b_*
 
-# VSCode settings
+# VSCode
 .vscode
+*.code-workspace
