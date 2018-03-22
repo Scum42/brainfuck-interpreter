@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "args.h"
 
 bitset<NUM_OPTIONS> options;
@@ -22,6 +24,11 @@ vector<string> parseArgs(int argc, char **argv)
         args.push_back(arg);
     }
 
+    if (args.size() == 1)
+    {
+        options[O_HELP] = true;
+    }
+
     for (unsigned int i = 0; i < args.size(); i++)
     {
         string arg = args[i];
@@ -29,11 +36,12 @@ vector<string> parseArgs(int argc, char **argv)
         {
             for (unsigned int j = 1; j < arg.length(); j++)
             {
+                bool found = false;
                 for (int k = 0; k < NUM_OPTIONS; k++)
                 {
                     if (arg[j] == OPTION_CHARS[k])
                     {
-                        options[k] = true;
+                        found = options[k] = true;
 
                         switch (k)
                         {
@@ -48,6 +56,11 @@ vector<string> parseArgs(int argc, char **argv)
                             break;
                         }
                     }
+                }
+
+                if (!found)
+                {
+                    options[O_HELP] = true;
                 }
             }
         }
